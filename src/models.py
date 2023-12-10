@@ -23,7 +23,7 @@ class Character(Base):
     Mass = Column(Float)
     BirthYear = Column(String(10))
     Homeworld = Column(Integer, ForeignKey(Planet.PlanetID))
-    Planet = relationship(Planet)
+    P = relationship(Planet)
 
 class Starship(Base):
     __tablename__ = 'Starship'
@@ -31,7 +31,7 @@ class Starship(Base):
     Name = Column(String(50), unique=True, nullable=False)
     Model = Column(String(50), nullable=False)
     Type = Column(String(250))
-    Pilotid = Column(Integer, ForeignKey(Character.CharacterID))
+    PilotID = Column(Integer, ForeignKey(Character.CharacterID))
     C = relationship(Character)
 
 class Vehicle(Base):
