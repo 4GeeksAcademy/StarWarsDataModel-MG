@@ -7,7 +7,7 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class planet(Base):
+class Planet(Base):
     __tablename__ = 'planet'
     planet_id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True ,nullable=False)
@@ -15,66 +15,66 @@ class planet(Base):
     terrain = Column(String(50))
     climate = Column(String(50))
 
-class character(Base):
+class Character(Base):
     __tablename__ = 'character'
     character_id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True,nullable=False)
     height = Column(Float)
     mass = Column(Float)
     birth_year = Column(String(10))
-    homeworld_id = Column(Integer, ForeignKey(planet.planet_id))
-    homeworld_id = relationship(planet)
+    homeworld_id = Column(Integer, ForeignKey('planet.planet_id'))
+    homeworld = relationship('Planet')
 
-class starship(Base):
+class Starship(Base):
     __tablename__ = 'starship'
     starship_id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     model = Column(String(50), nullable=False)
-    type = Column(String(250))
-    pilot_id = Column(Integer, ForeignKey(character.character_id))
-    pilot_id = relationship(character)
+    starship_type = Column(String(250))
+    pilot_id = Column(Integer, ForeignKey('character.character_id'))
+    pilot = relationship('Character')
 
-class vehicle(Base):
+class Vehicle(Base):
     __tablename__ = 'vehicle'
     vehicle_id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
     model = Column(String(50), nullable=False)
-    type = Column(String(50))
-    pilot_id = Column(Integer, ForeignKey(character.character_id))
-    pilot_id = relationship(character)
+    vehicle_type = Column(String(50))
+    pilot_id = Column(Integer, ForeignKey('character.character_id'))
+    pilot = relationship('Character')
 
-class film_data(Base):
+class FilmData(Base):
     __tablename__ = 'film_data'
     film_data_id = Column(Integer, primary_key=True)
-    character_id = Column(Integer, ForeignKey(character.character_id))
-    character_id = relationship(character)
-    planet_id = Column(Integer, ForeignKey(planet.planet_id))
-    planet_id = relationship(planet)
-    starship_id = Column(Integer, ForeignKey(starship.starship_id))
-    starship_id = relationship(starship)
-    vehicle_id = Column(Integer, ForeignKey(vehicle.vehicle_id))
-    V = relationship(vehicle)
+    character_id = Column(Integer, ForeignKey('character.character_id'))
+    character = relationship('Character')
+    planet_id = Column(Integer, ForeignKey('planet.planet_id'))
+    planet = relationship('Planet')
+    starship_id = Column(Integer, ForeignKey('starship.starship_id'))
+    starship = relationship('Starship')
+    vehicle_id = Column(Integer, ForeignKey('vehicle.vehicle_id'))
+    vehicle = relationship('Vehicle')
 
-class film(Base):
+class Film(Base):
     __tablename__ = 'film'
     film_id = Column(Integer, primary_key=True)
     title = Column(String(50), unique=True, nullable=False)
-    film_data_id = Column(Integer, ForeignKey(film_data.film_data_id))
-    film_data_id = relationship(film_data)
+    film_data_id = Column(Integer, ForeignKey('film_data.film_data_id'))
+    film_data = relationship('FilmData')
 
 class Favorite(Base):
-    __tablename__ = 'Favorite'
-    FavoriteID = Column(Integer, primary_key=True)
-    character_id = Column(Integer, ForeignKey(character.character_id))
-    character_id = relationship(character)
-    planet_id = Column(Integer, ForeignKey(planet.planet_id))
-    planet_id = relationship(planet)
-    starship_id = Column(Integer, ForeignKey(starship.starship_id))
-    starship_id = relationship(starship)
-    vehicle_id = Column(Integer, ForeignKey(vehicle.vehicle_id))
-    vehicle_id = relationship(vehicle)
-    film_id = Column(Integer, ForeignKey(film.film_id))
-    film_id = relationship(film)
+    __tablename__ = 'favorite'
+    favorite_id = Column(Integer, primary_key=True)
+    character_id = Column(Integer, ForeignKey('character.character_id'))
+    character = relationship('Character')
+    planet_id = Column(Integer, ForeignKey('planet.planet_id'))
+    planet = relationship('Planet')
+    starship_id = Column(Integer, ForeignKey('starship.starship_id'))
+    starship = relationship('Starship')
+    vehicle_id = Column(Integer, ForeignKey('vehicle.vehicle_id'))
+    vehicle = relationship('Vehicle')
+    film_id = Column(Integer, ForeignKey('film.film_id'))
+    film = relationship('Film')
 
 
     def to_dict(self):
